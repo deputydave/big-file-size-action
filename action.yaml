@@ -1,0 +1,24 @@
+name: "Big File Checker"
+description: "Warns when files in a PR exceed a specified size limit"
+inputs:
+  max_size:
+    description: "Maximum allowed file size in bytes"
+    required: true
+    default: "5242880"
+  fail_on_large_files:
+    description: "Whether to fail the action when large files are found"
+    required: false
+    default: "false"
+  exclude_patterns:
+    description: "Comma-separated list of file patterns to exclude (e.g., '*.log,*.tmp')"
+    required: false
+    default: ""
+  include_patterns:
+    description: "Comma-separated list of file patterns to include (e.g., '*.zip,*.tar.gz')"
+    required: false
+    default: ""
+runs:
+  using: "composite"
+  steps:
+    - shell: bash
+      run: ./check_files.sh

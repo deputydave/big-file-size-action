@@ -1,0 +1,35 @@
+name: Check File Sizes
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  check-files:
+    runs-on: ubuntu-latest
+    name: Check for large files
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Check for files over 5MB
+        id: file-check
+        uses: ./
+        with:
+          max_size: '5242880'  # 5MB
+          fail_on_large_files: 'false'
+          exclude_patterns: '*.log,*.tmp,node_modules/**,.git/**'
+          
+      - name: Report results
+        if: steps.file-check.outputs.large_files_found == 'true'
+        run: |
+          echo "⚠️  Found ${{ steps.file-check.outputs.large_files_count }} large files"
+          echo "Files: ${{ steps.file-check.outputs.large_files_json }}"
+          
+      - name: Success message
+        if: steps.file-check.outputs.large_files_found == 'false'
+        run: |
+          echo "✅ No large files found - repository size is good!" 
