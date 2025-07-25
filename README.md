@@ -139,19 +139,21 @@ jobs:
 
 ## Pattern Matching
 
-The action uses Python's `fnmatch` for pattern matching, which supports:
+The action uses bash pattern matching (globbing), which supports:
 
 - `*` - matches any sequence of characters
 - `?` - matches any single character
 - `[seq]` - matches any character in seq
 - `[!seq]` - matches any character not in seq
+- `**` - matches directories recursively (when supported)
 
 ### Pattern Examples
 
 - `*.log` - all log files
-- `*.{jpg,png,gif}` - image files
-- `node_modules/**` - entire node_modules directory
+- `*.{jpg,png,gif}` - image files (brace expansion)
+- `node_modules/*` - files in node_modules directory
 - `dist/*.js` - JavaScript files in dist directory
+- `**/*.tmp` - all .tmp files in any subdirectory
 
 ## Development
 
@@ -166,9 +168,15 @@ export INPUT_FAIL_ON_LARGE_FILES=false
 export INPUT_EXCLUDE_PATTERNS="*.log,*.tmp"
 export INPUT_INCLUDE_PATTERNS=""
 
-# Run the script (copy the shell script from action.yaml)
+# Run the script
 ./check_files.sh
 ```
+
+### Requirements
+
+- **Bash**: The action requires bash shell (available on all GitHub runners)
+- **Standard Unix tools**: Uses `find`, `stat`, and basic shell commands
+- **Cross-platform**: Works on both Linux and macOS runners
 
 ### Contributing
 
