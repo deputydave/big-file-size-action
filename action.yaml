@@ -1,5 +1,7 @@
 name: "Big File Checker"
 description: "Warns when files in a PR exceed a specified size limit"
+icon: "file-text"
+color: "yellow"
 inputs:
   max_size:
     description: "Maximum allowed file size in bytes"
